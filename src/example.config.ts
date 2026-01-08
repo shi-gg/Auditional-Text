@@ -10,13 +10,6 @@ export const Config: ConfigType = {
     ad: 'Invite me now!',
     guildLogging: '123',
 
-    postgres: {
-        host: 'localhost',
-        user: 'tts',
-        password: 'abc',
-        database: 'tts'
-    },
-
     apis: {
         tts: 'http://localhost:3000/invoke',
 

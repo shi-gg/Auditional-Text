@@ -1,6 +1,31 @@
-version: '3'
 services:
-  tts:
-    container_name: tts
-    image: tts
-    restart: unless-stopped
+    aud:
+        container_name: aud
+        build: .
+        image: aud
+        restart: unless-stopped
+
+    postgres:
+        container_name: aud-db
+        image: postgres:18-alpine
+        restart: unless-stopped
+        environment:
+            - POSTGRES_USER=${DATABASE_USER}
+            - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+            - POSTGRES_DB=${DATABASE_NAME}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+        shm_size: 2g
+        healthcheck:
+            test: ["CMD", "pg_isready", "-U", "${DATABASE_USER}"]
+            interval: 1m
+            timeout: 10s
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "3"
+
+volumes:
+    postgres_data:

@@ -1,5 +1,4 @@
 import { APIApplicationCommandOption, ChatInputCommandInteraction, Collection } from 'discord.js';
-import { PoolConfig } from 'pg';
 
 export type Command = {
     name: string;
@@ -24,8 +23,6 @@ export type ConfigType = {
 
     ad: string;
     guildLogging: string;
-
-    postgres: PoolConfig;
 
     apis: {
         tts: string;
