@@ -1,11 +1,12 @@
-import { ActivityType, ApplicationCommandDataResolvable } from 'discord.js';
-import { Client as Dlist } from 'dlist.js';
+import type { ApplicationCommandDataResolvable } from "discord.js";
+import { ActivityType } from "discord.js";
+import { Client as Dlist } from "dlist.js";
+import type { ShardingClient } from "status-sharding";
 
-import { ShardingClient } from 'status-sharding';
-import { Config } from '../config';
+import { Config } from "../config";
 
 export default {
-    name: 'ready',
+    name: "ready",
     once: true,
     run: async (client: ShardingClient) => {
         console.log(`Hello from ${client.cluster.id}`);
@@ -13,32 +14,32 @@ export default {
         const Interactions: ApplicationCommandDataResolvable[] = [];
 
         client.user?.setPresence({
-            status: 'online',
+            status: "online",
             activities: [
                 {
                     type: ActivityType.Custom,
-                    name: '<a:emoji_174:948133729535135744>',
+                    name: "<a:emoji_174:948133729535135744>",
                     state: `#${client.cluster.id} • wamellow.com`
                 }
             ]
         });
 
-        Config.data.interactions.commands.forEach((command) => {
+        for (const command of Config.data.interactions.commands.values()) {
             Interactions.push({
                 name: command.name,
                 description: command.description,
                 options: command.options,
-                dm_permission: command.dm_permission,
+                dm_permission: command.dm_permission
             });
-        });
+        }
 
-        client.application?.commands.set(Interactions);
+        await client.application?.commands.set(Interactions);
 
         if (client.cluster.id !== 0) return;
 
         const dlist = new Dlist({
             token: Config.dlist,
-            bot: client.user?.id || '',
+            bot: client.user?.id || ""
         });
 
         setInterval(
@@ -49,17 +50,17 @@ export default {
                 void dlist.postGuilds(guilds);
                 void postStats(client, guilds);
             },
-            10 * 60 * 1000
+            10 * 60 * 1_000
         );
     }
 };
 
-function postStats(client: ShardingClient, guildCount: number) {
-    Config.listings.forEach(async (listing) => {
-        if (!listing.active) return;
+async function postStats(client: ShardingClient, guildCount: number) {
+    for (const listing of Config.listings) {
+        if (!listing.active) continue;
 
-        let params = '';
-        const body = {};
+        let params = "";
+        const body: Record<string, number | undefined> = {};
 
         if (listing.query) {
             if (listing.structure.guilds) params += `?${listing.structure.guilds}=${guildCount}`;
@@ -69,15 +70,15 @@ function postStats(client: ShardingClient, guildCount: number) {
             if (listing.structure.shards) body[listing.structure.shards] = client.options.shardCount;
         }
 
-        fetch(`${listing.url}${params}`, {
+        await fetch(`${listing.url}${params}`, {
             method: listing.method,
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
                 Authorization: listing.authorization
             },
             body: body ? JSON.stringify(body) : undefined
         }).catch((error) => {
-            if (!error.message?.includes('520')) console.log(listing.url.split('//')[1].split('/')[0], error);
+            if (!error.message?.includes("520")) console.log(listing.url.split("//")[1].split("/")[0], error);
         });
-    });
+    }
 }

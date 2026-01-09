@@ -1,22 +1,22 @@
-import { APIApplicationCommandOption, ChatInputCommandInteraction, Collection } from 'discord.js';
+import type { APIApplicationCommandOption, ChatInputCommandInteraction, Collection } from "discord.js";
 
-export type Command = {
+export interface Command {
     name: string;
     description: string;
     options?: APIApplicationCommandOption[];
     dm_permission?: boolean;
 
     run: (interaction: ChatInputCommandInteraction) => Promise<void>;
-};
+}
 
-export type Event = {
+export interface Event {
     name: string;
     once?: boolean;
 
     run: (...arg0: unknown[]) => void;
 }
 
-export type ConfigType = {
+export interface ConfigType {
     dev: boolean;
     token: string;
     dlist: string;
@@ -28,7 +28,7 @@ export type ConfigType = {
         tts: string;
         votes?: string;
         votes_authorization?: string;
-    }
+    };
 
     // verify user's as real users by voting lmao
     verification: { enabled: false; } | {
@@ -36,24 +36,24 @@ export type ConfigType = {
         url: string;
         premiumUrl?: string;
         freeUse: number;
-    }
+    };
 
     data: {
         events: Collection<string, Event>;
         interactions: {
             commands: Collection<string, Command>;
-        }
-    }
+        };
+    };
 
     listings: {
         active: boolean;
         url: string;
         authorization: string;
-        method: 'PATCH' | 'POST' | 'PUT';
+        method: "PATCH" | "POST" | "PUT";
         structure: {
             guilds: string;
             shards?: string;
-        }
+        };
         query?: boolean;
-    }[]
+    }[];
 }

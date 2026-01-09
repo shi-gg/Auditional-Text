@@ -1,5 +1,6 @@
-import { Generated, Kysely, PostgresDialect } from 'kysely';
-import { Pool } from 'pg';
+import type { Generated } from "kysely";
+import { Kysely, PostgresDialect } from "kysely";
+import { Pool } from "pg";
 
 export const db = new Kysely<Database>({
     dialect: new PostgresDialect({
@@ -27,5 +28,5 @@ export interface DatabaseUser {
 
 interface Database {
     guilds: DatabaseGuild;
-    users: DatabaseUser
+    users: DatabaseUser;
 }

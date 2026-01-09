@@ -1,12 +1,13 @@
-import { writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
-import { Config } from '../config';
+import { writeFile } from "node:fs/promises";
+import { join } from "node:path";
+
+import { Config } from "../config";
 
 export async function getData(text: string, speaker: string) {
     const data = await fetch(Config.apis.tts, {
-        method: 'POST',
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({
             text,
@@ -19,16 +20,16 @@ export async function getData(text: string, speaker: string) {
     if (!data) return null;
 
     const fileName = randomCode(10);
-    const name = join(process.cwd(), 'cache', fileName + '.mp3');
+    const name = join(process.cwd(), "cache", fileName + ".mp3");
 
-    await writeFile(name, Buffer.from(data.v_str, 'base64'));
+    await writeFile(name, Buffer.from(data.v_str, "base64"));
     return name;
 }
 
 function randomCode(length: number): string {
-    let result = '';
+    let result = "";
 
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const charactersLength = characters.length;
 
     for (let i = 0; i < length; i++) {

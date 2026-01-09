@@ -1,16 +1,41 @@
 {
     "compilerOptions": {
-        "module": "CommonJS",
-        "target": "ES2022",
-        "sourceMap": true,
+        /* Basic Options */
+        "incremental": true,
+        "module": "ESNext",
+        "target": "ES2024",
         "outDir": "./dist",
-        "noImplicitAny": false,
-        "declaration": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
+        /* Strict Type-Checking Options */
         "strict": true,
-        "resolveJsonModule": true
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        /* Additional Checks */
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": false, // modified
+        "noFallthroughCasesInSwitch": true,
+        /* Module Resolution Options */
+        "moduleResolution": "Bundler",
+        "esModuleInterop": true,
+        "declaration": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "noUncheckedIndexedAccess": false, // modified
+        "sourceMap": true,
+        /* Experimental Options */
+        "experimentalDecorators": false, // modified
+        /* Advanced Options */
+        "forceConsistentCasingInFileNames": true
     },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules"]
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }
